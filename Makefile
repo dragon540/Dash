@@ -13,4 +13,7 @@ $(PROGNAME): main.o
 clean:
 	rm *.o
 
+run:
+	./$(PROGNAME)
+
 
