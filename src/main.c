@@ -9,10 +9,13 @@
 #include <netinet/in.h>
 
 #include "connect.h"
+#include "communicate.h"
 
 int main(int argc, char *argv[]) {
     printf("Dash server running...\n");
 
-    estTcpConnection(8080);
+    int sock = estTcpConnection(8080);
+    printf("%d\n", sock);
+    printRecvdData(sock);
     return 0;
 }

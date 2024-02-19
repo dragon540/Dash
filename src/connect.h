@@ -5,5 +5,5 @@
 #ifndef DASHSERVER_CONNECT_H
 #define DASHSERVER_CONNECT_H
 
-void estTcpConnection(int port_num);
+int estTcpConnection(int port_num);
 #endif //DASHSERVER_CONNECT_H

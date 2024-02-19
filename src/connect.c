@@ -10,7 +10,9 @@
 #include <sys/types.h>
 #include <netinet/in.h>
 
-void estTcpConnection(int port_num) {
+// return communication socket_fd on success
+// otherwise exits
+int estTcpConnection(int port_num) {
     int connectionSock_fd = socket(AF_INET, SOCK_STREAM, 0);
 
     // check if connection socket is created successfully or not
@@ -34,7 +36,7 @@ void estTcpConnection(int port_num) {
             connectionAddr.sin_family = AF_INET;
             connectionAddr.sin_addr.s_addr = htonl(INADDR_ANY);
             connectionAddr.sin_port = htons(port_num);
-            connectionAddr.sin_zero[7] = '\0';
+            connectionAddr.sin_zero[8] = '\0';
 
             int success = bind(connectionSock_fd, (struct sockaddr*)&connectionAddr,
                     sizeof(struct sockaddr));
@@ -63,6 +65,7 @@ void estTcpConnection(int port_num) {
                     }
                     else {
                         printf("TCP connection established\n");
+                        return communicateSock_fd;
                     }
                 }
             }
