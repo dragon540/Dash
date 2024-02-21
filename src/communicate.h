@@ -12,6 +12,6 @@ char* recvdData_dyn(int communicateSock_fd);
 
 // assumes the HTTP method is GET
 // returns the URL requested in form of an array of character
-void readUrlFromGETReq(char *url);
+void readUrlFromGETReq(char *url, uint16_t port_num);
 
 #endif //DASHSERVER_COMMUNICATE_H

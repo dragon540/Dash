@@ -12,7 +12,7 @@
 
 // return communication socket_fd on success
 // otherwise exits
-int estTcpConnection(int port_num) {
+int estTcpConnection(uint16_t port_num) {
     int connectionSock_fd = socket(AF_INET, SOCK_STREAM, 0);
 
     // check if connection socket is created successfully or not

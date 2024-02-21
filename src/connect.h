@@ -5,5 +5,5 @@
 #ifndef DASHSERVER_CONNECT_H
 #define DASHSERVER_CONNECT_H
 
-int estTcpConnection(int port_num);
+int estTcpConnection(uint16_t port_num);
 #endif //DASHSERVER_CONNECT_H

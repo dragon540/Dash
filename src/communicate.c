@@ -26,17 +26,15 @@ char* recvdData_dyn(int communicateSock_fd) {
 
 // assumes the HTTP method is GET
 // returns the URL requested in form of an array of character
-void readUrlFromGETReq(char *url) {
+void readUrlFromGETReq(char *url, uint16_t port_num) {
     // example request line
     // GET /index.html HTTP/1.1
 
-    int sock = estTcpConnection(8080);
+    int sock = estTcpConnection(port_num);
     char *tempBuffer = recvdData_dyn(sock);
     int i = 4;
-    while( (tempBuffer[i] != '\0') && (tempBuffer[i] != ' ') && (tempBuffer[i] != 'z')) {
-        if(tempBuffer[i] == ' ') break;
+    while(tempBuffer[i] != '\0' && tempBuffer[i] != ' ') {
         url[i-4] = tempBuffer[i];
-
         i++;
     }
     url[i-4] = '\0';
