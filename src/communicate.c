@@ -9,6 +9,7 @@
 #include <netinet/in.h>
 #include <stdlib.h>
 #include <stdio.h>
+#include <string.h>
 
 // returns the pointer to a dynamically created string
 // containing the first 256 characters
@@ -38,4 +39,13 @@ void readUrlFromGETReq(char *url, uint16_t port_num) {
         i++;
     }
     url[i-4] = '\0';
+
+    sendOKResponse(sock); // experimental function call
+}
+
+void sendOKResponse(int sockfd) {
+    char *data = "HTTP/1.1 200 OK\nContent-Length: 4\nContent-Type:text/plain\n\npong";
+    int len = strlen(data);
+
+    send(sockfd, data, len, 0);
 }
