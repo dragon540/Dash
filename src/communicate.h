@@ -5,6 +5,8 @@
 #ifndef DASHSERVER_COMMUNICATE_H
 #define DASHSERVER_COMMUNICATE_H
 
+#include <stdint.h>
+
 // returns the pointer to a dynamically created string
 // containing the first 256 characters
 // make sure to free the memory from the caller side
