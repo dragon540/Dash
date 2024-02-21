@@ -5,5 +5,9 @@
 #ifndef DASHSERVER_COMMUNICATE_H
 #define DASHSERVER_COMMUNICATE_H
 
-char* printRecvdData(int communicateSock_fd);
+// returns the pointer to a dynamically created string
+// containing the first 256 characters
+// make sure to free the memory from the caller side
+char* recvdData_dyn(int communicateSock_fd);
+
 #endif //DASHSERVER_COMMUNICATE_H
