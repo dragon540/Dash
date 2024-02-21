@@ -2,7 +2,7 @@ CC=gcc
 PROGNAME=DashServer
 CFLAGS=Wall
 
-all: main.o $(PROGNAME) clean
+all: $(PROGNAME) clean
 
 connect.o: src/connect.c src/connect.h
 	$(CC) -c src/connect.c
