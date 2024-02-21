@@ -3,6 +3,7 @@
 //
 
 #include "communicate.h"
+#include "connect.h"
 
 #include <sys/socket.h>
 #include <netinet/in.h>
@@ -21,4 +22,22 @@ char* recvdData_dyn(int communicateSock_fd) {
     }
     buff[255] = '\0';
     return buff;
+}
+
+// assumes the HTTP method is GET
+// returns the URL requested in form of an array of character
+void readUrlFromGETReq(char *url) {
+    // example request line
+    // GET /index.html HTTP/1.1
+
+    int sock = estTcpConnection(8080);
+    char *tempBuffer = recvdData_dyn(sock);
+    int i = 4;
+    while( (tempBuffer[i] != '\0') && (tempBuffer[i] != ' ') && (tempBuffer[i] != 'z')) {
+        if(tempBuffer[i] == ' ') break;
+        url[i-4] = tempBuffer[i];
+
+        i++;
+    }
+    url[i-4] = '\0';
 }

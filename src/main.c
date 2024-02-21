@@ -14,8 +14,18 @@
 int main(int argc, char *argv[]) {
     printf("Dash server running...\n");
 
-    int sock = estTcpConnection(8080);
+    /*** int sock = estTcpConnection(8080);
     printf("%d\n", sock);
-    printRecvdData(sock);
+    char *str = recvdData_dyn(sock);
+    printf("%s\n", str);
+    str = recvdData_dyn(sock);
+    printf("%s\n", str);
+    str = recvdData_dyn(sock);
+    printf("%s\n", str);***/
+
+    char url[256];
+    readUrlFromGETReq(url);
+    printf("%s\n", url);
+
     return 0;
 }

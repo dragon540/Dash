@@ -10,4 +10,8 @@
 // make sure to free the memory from the caller side
 char* recvdData_dyn(int communicateSock_fd);
 
+// assumes the HTTP method is GET
+// returns the URL requested in form of an array of character
+void readUrlFromGETReq(char *url);
+
 #endif //DASHSERVER_COMMUNICATE_H
