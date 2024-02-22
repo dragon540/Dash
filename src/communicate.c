@@ -5,6 +5,7 @@
 #include "communicate.h"
 #include "connect.h"
 #include "read_resource.h"
+#include "helper.h"
 
 #include <sys/socket.h>
 #include <netinet/in.h>
@@ -81,7 +82,8 @@ char* constructOKResponseToSend_dyn(int conType, char *content) {
     long int respLen = strlen(content);
 
     char content_length[100] = "Content-Length: ";
-    char *num_len = "1100"; // use a function to return a string denoting the content length in characters
+    char *num_len = "1100";
+    //intToStr_dyn(respLen); -> calling it gives corrupted size vs. prev_size while consolidating error
     strcat(content_length, num_len);
     strcat(content_length, "\n");
 
