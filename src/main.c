@@ -3,13 +3,11 @@
 //
 
 #include <stdio.h>
-#include <stdlib.h>
-#include <sys/types.h>
-#include <sys/socket.h>
-#include <netinet/in.h>
+#include <stdint.h>
 
 #include "connect.h"
 #include "communicate.h"
+#include "read_resource.h"
 
 int main(int argc, char *argv[]) {
     printf("Dash server running...\n");
@@ -26,6 +24,9 @@ int main(int argc, char *argv[]) {
     char url[256];
     readUrlFromGETReq(url, 80);
     printf("%s\n", url);
+    //char *c;
+    //c = readFile_dyn("/home/shobhit/Desktop/temp");
+    //printf("%s\n", c);
 
     return 0;
 }

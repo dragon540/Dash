@@ -4,6 +4,7 @@
 
 #include "communicate.h"
 #include "connect.h"
+#include "read_resource.h"
 
 #include <sys/socket.h>
 #include <netinet/in.h>
@@ -40,9 +41,14 @@ void readUrlFromGETReq(char *url, uint16_t port_num) {
     }
     url[i-4] = '\0';
 
+    /*** experimental call ***/
     //sendOKResponse(sock); // experimental function call
-    //sendCompleteResponse(sock, "HTTP/1.1 200 OK\nContent-Length: 4\nContent-Type:text/plain\n\nhello world 123");
-    // experimental function call
+    char *msg = readFile_dyn("/home/shobhit/Desktop/temp");
+    char final_msg[strlen(msg) + 100];
+    strcpy(final_msg, "HTTP/1.1 200 OK\nContent-Length: 100\nContent-Type:text/plain\n\n");
+    strcat(final_msg, msg);
+    sendCompleteResponse(sock, final_msg);
+    /*** end of experimemntal call ***/
 }
 
 void sendOKResponse(int sockfd) {
