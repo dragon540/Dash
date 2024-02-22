@@ -42,12 +42,11 @@ void readUrlFromGETReq(char *url, uint16_t port_num) {
     url[i-4] = '\0';
 
     /*** experimental call ***/
-    //sendOKResponse(sock); // experimental function call
-    char *msg = readFile_dyn("/home/shobhit/Desktop/temtrdp");
-    char final_msg[strlen(msg) + 100];
-    strcpy(final_msg, "HTTP/1.1 200 OK\nContent-Length: 100\nContent-Type:text/plain\n\n");
-    strcat(final_msg, msg);
-    sendCompleteResponse(sock, final_msg);
+    char *con = readFile_dyn("/home/shobhit/Desktop/temp");
+    char *res = constructOKResponseToSend_dyn(PLAIN, con);
+    sendCompleteResponse(sock, res);
+    free(con);
+    free(res);
     /*** end of experimemntal call ***/
 }
 
@@ -58,7 +57,6 @@ void sendOKResponse(int sockfd) {
     send(sockfd, data, len, 0);
 }
 
-// send() doesn't guarantee to send full data at once
 // handles partial sends
 // exits on error
 void sendCompleteResponse(int comm_sockfd, char *msg) {
@@ -75,4 +73,36 @@ void sendCompleteResponse(int comm_sockfd, char *msg) {
         }
         byteSent += n;
     }
+}
+
+// this function creates a valid HTTP/1.1 200 OK response
+// free the memory from the caller side
+char* constructOKResponseToSend_dyn(int conType, char *content) {
+    long int respLen = strlen(content);
+
+    char content_length[100] = "Content-Length: ";
+    char *num_len = "1100"; // use a function to return a string denoting the content length in characters
+    strcat(content_length, num_len);
+    strcat(content_length, "\n");
+
+    char *content_type;
+    switch (conType) {
+        case PLAIN:
+            content_type = "Content-Type:text/plain\n\n";
+            break;
+        case HTML:
+            content_type = "Content-Type:text/html\n\n";
+            break;
+    }
+    char *response_code = "HTTP/1.1 200 OK\n";
+    char *response = (char*) malloc(strlen(response_code) + strlen(content_length) +
+            strlen(content_type) + respLen + 1);
+
+    strcat(response, response_code);
+    strcat(response, content_length);
+    strcat(response, content_type);
+    strcat(response, content);
+    //strcat(response, "\0");
+
+    return response;
 }

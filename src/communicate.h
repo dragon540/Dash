@@ -7,6 +7,11 @@
 
 #include <stdint.h>
 
+enum Content_Type {
+    PLAIN,
+    HTML,
+};
+
 // returns the pointer to a dynamically created string
 // containing the first 256 characters
 // free the memory from the caller side
@@ -22,5 +27,12 @@ void sendOKResponse(int sockfd);
 // handles partial sends
 // exits on error
 void sendCompleteResponse(int sockfd, char *msg);
+
+// HTTP response consists of several parts including METHOD, Content-Length, Content-Type, content
+// this function creates a valid HTTP/1.1 200 OK response
+// ARGUMENTS - PLAIN or HTML, and a *content which points to the actual message to be sent
+// RETURN - pointer to a dynamically allocated string denoting a valid OK response
+// free the memory from the caller side
+char* constructOKResponseToSend_dyn(int conType, char *content);
 
 #endif //DASHSERVER_COMMUNICATE_H
