@@ -1,6 +1,6 @@
 CC=gcc
 PROGNAME=DashServer
-CFLAGS=Wall
+CFLAG1=-Wall
 
 all: $(PROGNAME) clean
 
@@ -17,7 +17,7 @@ main.o: src/main.c
 	$(CC) -c src/main.c
 
 $(PROGNAME): connect.o communicate.o read_resource.o main.o
-	$(CC) connect.o communicate.o read_resource.o main.o -o $(PROGNAME)
+	$(CC) $(CFLAG1) connect.o communicate.o read_resource.o main.o -o $(PROGNAME)
 
 clean:
 	rm *.o
