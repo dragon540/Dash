@@ -24,7 +24,7 @@ int main(int argc, char *argv[]) {
     printf("%s\n", str);***/
 
     char url[256];
-    readUrlFromGETReq(url, 8080);
+    readUrlFromGETReq(url, 80);
     printf("%s\n", url);
 
     return 0;

@@ -40,7 +40,9 @@ void readUrlFromGETReq(char *url, uint16_t port_num) {
     }
     url[i-4] = '\0';
 
-    sendOKResponse(sock); // experimental function call
+    //sendOKResponse(sock); // experimental function call
+    //sendCompleteResponse(sock, "HTTP/1.1 200 OK\nContent-Length: 4\nContent-Type:text/plain\n\nhello world 123");
+    // experimental function call
 }
 
 void sendOKResponse(int sockfd) {
@@ -48,4 +50,18 @@ void sendOKResponse(int sockfd) {
     int len = strlen(data);
 
     send(sockfd, data, len, 0);
+}
+
+void sendCompleteResponse(int comm_sockfd, char *msg) {
+    int msgLen = strlen(msg);
+    int byteSent = 0;
+    int n;
+
+    while(byteSent < msgLen) {
+        n = send(comm_sockfd, msg + byteSent, msgLen, 0);
+        if(n != -1) byteSent += n;
+        else {
+            perror("Error in sending data packets");
+        }
+    }
 }

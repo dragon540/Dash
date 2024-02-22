@@ -17,5 +17,6 @@ char* recvdData_dyn(int communicateSock_fd);
 void readUrlFromGETReq(char *url, uint16_t port_num);
 
 void sendOKResponse(int sockfd);
+void sendCompleteResponse(int sockfd, char *msg);
 
 #endif //DASHSERVER_COMMUNICATE_H
