@@ -14,7 +14,7 @@
 
 // returns the pointer to a dynamically created string
 // containing the first 256 characters
-// make sure to free the memory from the caller side
+// free the memory from the caller side
 char* recvdData_dyn(int communicateSock_fd) {
     char *buff = (char*) malloc(256);
     int len = recv(communicateSock_fd, buff, 256, 0);
@@ -43,7 +43,7 @@ void readUrlFromGETReq(char *url, uint16_t port_num) {
 
     /*** experimental call ***/
     //sendOKResponse(sock); // experimental function call
-    char *msg = readFile_dyn("/home/shobhit/Desktop/temp");
+    char *msg = readFile_dyn("/home/shobhit/Desktop/temtrdp");
     char final_msg[strlen(msg) + 100];
     strcpy(final_msg, "HTTP/1.1 200 OK\nContent-Length: 100\nContent-Type:text/plain\n\n");
     strcat(final_msg, msg);
@@ -58,16 +58,21 @@ void sendOKResponse(int sockfd) {
     send(sockfd, data, len, 0);
 }
 
+// send() doesn't guarantee to send full data at once
+// handles partial sends
+// exits on error
 void sendCompleteResponse(int comm_sockfd, char *msg) {
     int msgLen = strlen(msg);
     int byteSent = 0;
     int n;
-
     while(byteSent < msgLen) {
         n = send(comm_sockfd, msg + byteSent, msgLen, 0);
-        if(n != -1) byteSent += n;
-        else {
+        // check if data is sent successfully
+        // otherwise exit
+        if(n == -1) {
             perror("Error in sending data packets");
+            exit(EXIT_FAILURE);
         }
+        byteSent += n;
     }
 }
