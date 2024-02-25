@@ -45,17 +45,22 @@ char digitToChar(int digit) {
 }
 
 char* intToStr_dyn(long int num) {
-    char buff[100];
+    // determine number of digits of num
+    long int temp = num;
+    int count = 0;
+    while(temp != 0) {
+        temp = temp/10;
+        count++;
+    }
+    // convert int to str
+    char *buff = (char*) malloc(count + 1);
+    buff[count] = '\0';
     int i = 0;
     while(num != 0) {
         char c = digitToChar(num%10);
         num = num/10;
-        buff[i] = c;
+        buff[count - i - 1] = c;
         i++;
     }
-    buff[i] = '\0';
-    char *val = (char*) malloc(strlen(buff) + 1);
-    strcpy(val, buff);
-    strcat(val, "\0");
-    return val;
+    return buff;
 }

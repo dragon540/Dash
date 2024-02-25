@@ -6,6 +6,6 @@
 #define DASHSERVER_HELPER_H
 
 char digitToChar(int digit);
-char* intToStr_val(long int num);
+char* intToStr_dyn(long int num);
 
 #endif //DASHSERVER_HELPER_H
