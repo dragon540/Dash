@@ -28,6 +28,7 @@ char* readFile_dyn(char *filepath) {
     rewind(fp); // sets the file position indicator back to start position
 
     char *content = (char*) malloc(file_total_char + 1);
+    strcpy(content, ""); // initialising string content
     while(fgets(curr_line, MAX_LEN_FILELINE, fp)) {
         strcat(content, curr_line);
     }
