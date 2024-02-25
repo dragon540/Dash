@@ -27,7 +27,7 @@ int main(int argc, char *argv[]) {
     readUrlFromGETReq(url, 80);
     //printf("%s\n", url);
     /***char *c;
-    c = readFile_dyn("/home/shobhit/Desktop/temp");
+    c = readFile_dyn("../DashServer/resource/example1.html");
     printf("%s\n", c);
     printf("c : %d\n", strlen(c));***/
 

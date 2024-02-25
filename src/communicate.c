@@ -44,9 +44,9 @@ void readUrlFromGETReq(char *url, uint16_t port_num) {
     free(tempBuffer);
 
     /*** experimental call ***/
-    char *con = readFile_dyn("/home/shobhit/Desktop/temp");
+    char *con = readFile_dyn("../DashServer/resource/example1.html");
     printf("%s\n", con);
-    char *res = constructOKResponseToSend_dyn(PLAIN, con);
+    char *res = constructOKResponseToSend_dyn(HTML, con);
     sendCompleteResponse(sock, res);
     free(con);
     free(res);
