@@ -26,9 +26,11 @@ int main(int argc, char *argv[]) {
     char url[256];
     readUrlFromGETReq(url, 80);
     //printf("%s\n", url);
-    //char *c;
-    //c = readFile_dyn("/home/shobhit/Desktop/temp");
-    //printf("%s\n", c);
+    /***char *c;
+    c = readFile_dyn("/home/shobhit/Desktop/temp");
+    printf("%s\n", c);
+    printf("c : %d\n", strlen(c));***/
+
 
     return 0;
 }

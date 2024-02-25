@@ -41,9 +41,11 @@ void readUrlFromGETReq(char *url, uint16_t port_num) {
         i++;
     }
     url[i-4] = '\0';
+    free(tempBuffer);
 
     /*** experimental call ***/
     char *con = readFile_dyn("/home/shobhit/Desktop/temp");
+    printf("%s\n", con);
     char *res = constructOKResponseToSend_dyn(PLAIN, con);
     sendCompleteResponse(sock, res);
     free(con);
@@ -82,8 +84,9 @@ char* constructOKResponseToSend_dyn(int conType, char *content) {
     long int respLen = strlen(content);
 
     char content_length[100] = "Content-Length: ";
-    char *num_len = "1100";
-    //intToStr_dyn(respLen); -> calling it gives corrupted size vs. prev_size while consolidating error
+    printf("respLen : %d\n", respLen); // for debugging
+    char *num_len = intToStr_dyn(respLen);
+    printf("num_len : %s\n", num_len); // for debugging
     strcat(content_length, num_len);
     strcat(content_length, "\n");
 
@@ -100,11 +103,11 @@ char* constructOKResponseToSend_dyn(int conType, char *content) {
     char *response = (char*) malloc(strlen(response_code) + strlen(content_length) +
             strlen(content_type) + respLen + 1);
 
-    strcat(response, response_code);
+    strcpy(response, response_code);
     strcat(response, content_length);
     strcat(response, content_type);
     strcat(response, content);
-    //strcat(response, "\0");
 
+    free(num_len);
     return response;
 }
