@@ -84,7 +84,7 @@ char* constructOKResponseToSend_dyn(int conType, char *content) {
     long int respLen = strlen(content);
 
     char content_length[100] = "Content-Length: ";
-    printf("respLen : %d\n", respLen); // for debugging
+    printf("respLen : %ld\n", respLen); // for debugging
     char *num_len = intToStr_dyn(respLen);
     printf("num_len : %s\n", num_len); // for debugging
     strcat(content_length, num_len);

@@ -24,8 +24,8 @@ int main(int argc, char *argv[]) {
     printf("%s\n", str);***/
 
     char url[256];
-    readUrlFromGETReq(url, 80);
-    //printf("%s\n", url);
+    readUrlFromGETReq(url, 8080);
+    printf("%s\n", url+1);
     /***char *c;
     c = readFile_dyn("../DashServer/resource/example1.html");
     printf("%s\n", c);
