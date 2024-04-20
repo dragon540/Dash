@@ -10,6 +10,7 @@
 #include "communicate.h"
 #include "read_resource.h"
 #include "helper.h"
+#include "page_map.h"
 
 int main(int argc, char *argv[]) {
     printf("Dash server running...\n");
@@ -24,8 +25,16 @@ int main(int argc, char *argv[]) {
     printf("%s\n", str);***/
 
     char url[256];
-    readUrlFromGETReq(url, 8080);
-    printf("%s\n", url+1);
+    //readUrlFromGETReq(url, 8080);
+    //printf("%s\n", url+1);
+
+    mapNewURL("/hello", "index.html");
+    mapNewURL("/rree", "newindex.html");
+    mapNewURL("/allo", "hello.html");
+
+
+
+    printBSTInorder(rootPtr);
     /***char *c;
     c = readFile_dyn("../DashServer/resource/example1.html");
     printf("%s\n", c);

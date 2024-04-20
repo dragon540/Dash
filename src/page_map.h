@@ -19,8 +19,9 @@ typedef struct MapBST {
     struct MapBST *leftNode;
 }MapBST;
 
-MapBST *rootPtr = NULL;
+extern MapBST *rootPtr;
 
-void mapNewURL(char URL[256], char filepath[256]);
+void mapNewURL(char *URL, char *filepath);
+void printBSTInorder(MapBST *node);
 
 #endif //DASHSERVER_PAGE_MAP_H
