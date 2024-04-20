@@ -4,6 +4,9 @@ CFLAG1=-Wall
 
 all: $(PROGNAME) clean
 
+page_map.o: src/page_map.c src/page_map.h
+	$(CC) -c src/page_map.c
+
 connect.o: src/connect.c src/connect.h
 	$(CC) -c src/connect.c
 
@@ -19,8 +22,8 @@ helper.o: src/helper.c src/helper.h
 main.o: src/main.c
 	$(CC) -c src/main.c
 
-$(PROGNAME): connect.o communicate.o read_resource.o helper.o main.o
-	$(CC) $(CFLAG1) connect.o communicate.o read_resource.o helper.o main.o -o $(PROGNAME)
+$(PROGNAME): page_map.o connect.o communicate.o read_resource.o helper.o main.o
+	$(CC) $(CFLAG1) page_map.o connect.o communicate.o read_resource.o helper.o main.o -o $(PROGNAME)
 
 clean:
 	rm *.o
