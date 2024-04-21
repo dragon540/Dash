@@ -58,3 +58,24 @@ void mapNewURL(char *URL, char *filepath) {
         temp->rightNode = NULL;
     }
 }
+
+char* determineFilepath(char *URL) {
+    MapBST *temp = rootPtr;
+    while(temp != NULL) {
+        if(strcmp(URL, temp->MappedURL) == 0) {
+            return temp->fileName;
+        }
+        else if(strcmp(URL, temp->MappedURL) > 0) {
+            if(temp->rightNode != NULL)
+                temp = temp->rightNode;
+            else
+                return rootPtr->fileName;
+        }
+        else if(strcmp(URL, temp->MappedURL) < 0) {
+            if(temp->leftNode != NULL)
+                temp = temp->leftNode;
+            else
+                return rootPtr->fileName;
+        }
+    }
+}
