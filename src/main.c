@@ -24,17 +24,20 @@ int main(int argc, char *argv[]) {
     str = recvdData_dyn(sock);
     printf("%s\n", str);***/
 
+    /**temporary config*/
+    mapNewURL("/", "../DashServer/resource/index.html");
+    mapNewURL("/ex1", "../DashServer/resource/index.html");
+    mapNewURL("/new", "../DashServer/resource/example1.html");
+    mapNewURL("/dragon", "../DashServer/resource/example1.html");
+    mapNewURL("/strawberry", "../DashServer/resource/example1.html");
+
+    //printBSTInorder(rootPtr);
+    //printf("%s\n", determineFilepath("/"));
+
     char url[256];
-    //readUrlFromGETReq(url, 8080);
+    readUrlFromGETReq(url, 8080);
     //printf("%s\n", url+1);
 
-    mapNewURL("/hello", "index.html");
-    mapNewURL("/rree", "newindex.html");
-    mapNewURL("/allo", "hello.html");
-
-
-
-    printBSTInorder(rootPtr);
     /***char *c;
     c = readFile_dyn("../DashServer/resource/example1.html");
     printf("%s\n", c);

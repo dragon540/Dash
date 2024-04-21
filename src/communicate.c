@@ -6,6 +6,7 @@
 #include "connect.h"
 #include "read_resource.h"
 #include "helper.h"
+#include "page_map.h"
 
 #include <sys/socket.h>
 #include <netinet/in.h>
@@ -44,7 +45,8 @@ void readUrlFromGETReq(char *url, uint16_t port_num) {
     free(tempBuffer);
 
     /*** experimental call ***/
-    char *con = readFile_dyn("../DashServer/resource/example1.html");
+    char *filepathToRead = determineFilepath(url);
+    char *con = readFile_dyn(filepathToRead);
     printf("%s\n", con);
     char *res = constructOKResponseToSend_dyn(HTML, con);
     sendCompleteResponse(sock, res);
