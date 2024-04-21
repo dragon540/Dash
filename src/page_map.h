@@ -20,9 +20,15 @@ typedef struct MapBST {
 }MapBST;
 
 extern MapBST *rootPtr;
+
+// prints BST in inorder for testing
 void printBSTInorder(MapBST *node);
 
+// maps URL string to the filepath string
 void mapNewURL(char *URL, char *filepath);
+
+// takes URL as parameter and returns the filepath mapped to that particular URL
+// NOTE: if no mapping is found then returns the filepath mapped to the rootPtr of the MapBST
 char* determineFilepath(char *URL);
 
 #endif //DASHSERVER_PAGE_MAP_H

@@ -9,6 +9,7 @@
 
 MapBST *rootPtr = NULL;
 
+// prints BST in inorder for testing
 void printBSTInorder(MapBST *node) {
     if(node == NULL) {
         printf("Empty tree\n");
@@ -20,6 +21,7 @@ void printBSTInorder(MapBST *node) {
     }
 }
 
+// maps URL string to the filepath string
 void mapNewURL(char *URL, char *filepath) {
     if(rootPtr == NULL) {
         rootPtr = (MapBST*) malloc(sizeof(MapBST));
@@ -32,7 +34,7 @@ void mapNewURL(char *URL, char *filepath) {
         MapBST *temp = rootPtr;
         while(temp != NULL) {
             // value of the URL to be mapped is lexicographically smaller than value of current node
-            if(strcmp(temp->MappedURL, URL) > 0) {
+            if(strcmp(URL, temp->fileName) < 0) {
                 if(temp->leftNode != NULL)
                     temp = temp->leftNode;
                 else {
@@ -42,7 +44,7 @@ void mapNewURL(char *URL, char *filepath) {
                 }
             }
             // value of the URL to be mapped is lexicographically larger than value of current node
-            else if(strcmp(temp->MappedURL, URL) < 0) {
+            else if(strcmp(URL, temp->fileName) > 0) {
                 if(temp->rightNode != NULL)
                     temp = temp->rightNode;
                 else {
@@ -59,6 +61,8 @@ void mapNewURL(char *URL, char *filepath) {
     }
 }
 
+// takes URL as parameter and returns the filepath mapped to that particular URL
+// NOTE: if no mapping is found then returns the filepath mapped to the rootPtr of the MapBST
 char* determineFilepath(char *URL) {
     MapBST *temp = rootPtr;
     while(temp != NULL) {
