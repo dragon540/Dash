@@ -52,6 +52,7 @@ void readUrlFromGETReq(char *url, uint16_t port_num) {
     sendCompleteResponse(sock, res);
     free(con);
     free(res);
+    close(sock);
     /*** end of experimemntal call ***/
 }
 
