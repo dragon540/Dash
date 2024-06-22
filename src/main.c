@@ -21,8 +21,7 @@ int main(int argc, char *argv[]) {
     //printBSTInorder(rootPtr);
     //printf("%s\n", determineFilepath("/"));
 
-    char url[256];
-    readUrlFromGETReq(url, 80);
+    sendAppropriateResponse_200OK(GET,80);
 
     return 0;
 }

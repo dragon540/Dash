@@ -28,41 +28,6 @@ char* recvdData_dyn(int communicateSock_fd) {
     return buff;
 }
 
-// assumes the HTTP method is GET
-// returns the URL requested in form of an array of character
-void readUrlFromGETReq(char *url, uint16_t port_num) {
-    // example request line
-    // GET /index.html HTTP/1.1
-
-    int sock = estTcpConnection(port_num);
-    char *tempBuffer = recvdData_dyn(sock);
-    int i = 4;
-    while(tempBuffer[i] != '\0' && tempBuffer[i] != ' ') {
-        url[i-4] = tempBuffer[i];
-        i++;
-    }
-    url[i-4] = '\0';
-    free(tempBuffer);
-
-    /*** experimental call ***/
-    char *filepathToRead = determineFilepath(url);
-    char *con = readFile_dyn(filepathToRead);
-    printf("%s\n", con);
-    char *res = constructOKResponseToSend_dyn(HTML, con);
-    sendCompleteResponse(sock, res);
-    free(con);
-    free(res);
-    close(sock);
-    /*** end of experimemntal call ***/
-}
-
-void sendOKResponse(int sockfd) {
-    char *data = "HTTP/1.1 200 OK\nContent-Length: 4\nContent-Type:text/plain\n\npong";
-    int len = strlen(data);
-
-    send(sockfd, data, len, 0);
-}
-
 // handles partial sends
 // exits on error
 void sendCompleteResponse(int comm_sockfd, char *msg) {
@@ -81,9 +46,65 @@ void sendCompleteResponse(int comm_sockfd, char *msg) {
     }
 }
 
+// assumes the HTTP method is GET
+// returns the URL requested in form of an array of character
+int readUrlFromGETReq(char *url, uint16_t port_num) {
+    // example request line
+    // GET /index.html HTTP/1.1
+
+    int sock = estTcpConnection(port_num);
+    char *tempBuffer = recvdData_dyn(sock);
+    int i = 4;
+    while(tempBuffer[i] != '\0' && tempBuffer[i] != ' ') {
+        url[i-4] = tempBuffer[i];
+        i++;
+    }
+    url[i-4] = '\0';
+    free(tempBuffer);
+
+    return sock;
+    /*** experimental call
+    char *filepathToRead = determineFilepath(url);
+    char *con = readFile_dyn(filepathToRead);
+    printf("%s\n", con);
+    char *res = constructOKResponseToSend_dyn(HTML, con);
+    sendCompleteResponse(sock, res);
+    free(con);
+    free(res);
+    close(sock);
+    end of experimemntal call ***/
+}
+
+// 200 OK response depends on whether the type of request was GET, PUT, PUSH
+// constructs appropriate 200 OK response based on type of request and sends it
+void sendAppropriateResponse_200OK(int reqType, int port_num) {
+    if(reqType == GET) {
+        char* urlSting[256]; // length = 256 for now, change later
+        int sock = readUrlFromGETReq(urlSting, port_num);
+
+        // sending resource
+        char *filepathToRead = determineFilepath(urlSting);
+        char *con = readFile_dyn(filepathToRead);
+        printf("%s\n", con);
+        char *res = constructOKResponseToSend_dyn(HTML, con);
+        sendCompleteResponse(sock, res);
+        free(con);
+        free(res);
+        close(sock);
+    }
+    else if(reqType == PUT) {
+        reqType = PUT;
+    }
+    else if(reqType == POST) {
+        reqType = POST;
+    }
+}
+
 // this function creates a valid HTTP/1.1 200 OK response
 // free the memory from the caller side
-char* constructOKResponseToSend_dyn(int conType, char *content) {
+// 200 OK response depends on whether the type of request was GET, PUT, PUSH
+// 200 OK response for GET request
+char* constructOKResponseToSend_GET_dyn(int conType, char *content) {
     long int respLen = strlen(content);
 
     char content_length[100] = "Content-Length: ";
@@ -114,3 +135,7 @@ char* constructOKResponseToSend_dyn(int conType, char *content) {
     free(num_len);
     return response;
 }
+// 200 OK response for PUT request
+char* constructOKResponseToSend_PUT_dyn(int conType, char *content);
+// 200 OK response for PUSH request
+char* constructOKResponseToSend_PUSH_dyn(int conType, char *content);
