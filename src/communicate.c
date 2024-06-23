@@ -122,7 +122,7 @@ void readUrlFromPOSTReq(char *url, char *tempBuffer) {
 
 // 200 OK response depends on whether the type of request was GET, PUT, POST
 // constructs appropriate 200 OK response based on type of request and sends it
-void sendAppropriateResponse_200OK(int reqType, int port_num) {
+void sendAppropriateResponse_200OK(int reqType, uint16_t port_num) {
     if(reqType == GET) {
         char urlSting[256]; // length = 256 for now, change later
         int sock = readReq(urlSting, port_num);
@@ -145,16 +145,23 @@ void sendAppropriateResponse_200OK(int reqType, int port_num) {
     }
 }
 
-/***void sendAppropriateResponse_404(int reqType, int port_num) {
+void sendAppropriateResponse_404NotFound(int reqType, uint16_t port_num) {
     if(reqType == GET) {
-        char* urlSting[256]; // length = 256 for now, change later
-        int sock = readUrlFromGETReq(urlSting, port_num);
+        char urlSting[256]; // length = 256 for now, change later
+        int sock = readReq(urlSting, port_num);
 
+        // sending resource
+        char *filepathToRead = determineFilepath(urlSting);
+        //char *con = readFile_dyn(filepathToRead);
+        char *con = readFile_dyn("../DashServer/resource/404NotFound.html"); // make it configurable later
+        printf("%s\n", con);
+        char *res = construct_404NotFound_ResponseToSend_GET_dyn(HTML, con);
+        sendCompleteResponse(sock, res);
+        free(con);
+        free(res);
+        close(sock);
     }
-    else {
-
-    }
-}***/
+}
 
 // this function creates a valid HTTP/1.1 200 OK response
 // free the memory from the caller side
@@ -196,7 +203,7 @@ char* constructOKResponseToSend_PUT_dyn(int conType, char *content);
 // 200 OK response for POST request
 char* constructOKResponseToSend_POST_dyn(int conType, char *content);
 
-/***char* construct_404NotFound_ResponseToSend_GET_dyn(int conType, char *content) {
+char* construct_404NotFound_ResponseToSend_GET_dyn(int conType, char *content) {
     long int respLen = strlen(content);
 
     char content_length[100] = "Content-Length: ";
@@ -226,4 +233,4 @@ char* constructOKResponseToSend_POST_dyn(int conType, char *content);
 
     free(num_len);
     return response;
-}***/
+}

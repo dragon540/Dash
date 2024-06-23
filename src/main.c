@@ -21,7 +21,8 @@ int main(int argc, char *argv[]) {
     //printBSTInorder(rootPtr);
     //printf("%s\n", determineFilepath("/"));
 
-    sendAppropriateResponse_200OK(GET,80);
+    //sendAppropriateResponse_200OK(GET,80);
+    sendAppropriateResponse_404NotFound(GET,80);
 
     return 0;
 }
