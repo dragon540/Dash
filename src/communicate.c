@@ -158,7 +158,7 @@ void sendAppropriateResponse_200OK(int reqType, int port_num) {
 
 // this function creates a valid HTTP/1.1 200 OK response
 // free the memory from the caller side
-// 200 OK response depends on whether the type of request was GET, PUT, PUSH
+// 200 OK response depends on whether the type of request was GET, PUT, POST
 // 200 OK response for GET request
 char* constructOKResponseToSend_GET_dyn(int conType, char *content) {
     long int respLen = strlen(content);
