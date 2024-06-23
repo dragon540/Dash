@@ -29,19 +29,19 @@ char* recvdData_dyn(int communicateSock_fd);
 void sendCompleteResponse(int sockfd, char *msg);
 
 // assumes the HTTP method is GET
-// returns the socket id
-// sets the URL requested in form of an array of character
-int readUrlFromGETReq(char *url, uint16_t port_num);
+// sets the URL requested in char *url
+// char *tempBuffer is the string of complete request
+void readUrlFromGETReq(char *url, char *tempBuffer);
 
 // assumes the HTTP method is PUT
-// returns the socket id
-// sets the URL requested in form of an array of character
-int readUrlFromPUTReq(char *url, uint16_t port_num);
+// sets the URL requested in char *url
+// char *tempBuffer is the string of complete request
+void readUrlFromPUTReq(char *url, char *tempBuffer);
 
 // assumes the HTTP method is POST
-// returns the socket id
-// sets the URL requested in form of an array of character
-int readUrlFromPOSTReq(char *url, uint16_t port_num);
+// sets the URL requested in char *url
+// char *tempBuffer is the string of complete request
+void readUrlFromPOSTReq(char *url, char *tempBuffer);
 
 // 200 OK response depends on whether the type of request was GET, PUT, PUSH
 // constructs appropriate 200 OK response based on type of request and sends it

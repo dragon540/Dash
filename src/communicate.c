@@ -46,35 +46,55 @@ void sendCompleteResponse(int comm_sockfd, char *msg) {
     }
 }
 
+// returns socket id of the connection and sets
+// char *url as url requested in the HTTP request
+int readReq(char *url, uint16_t port_num) {
+    int sock = estTcpConnection(port_num);
+    char *tempBuffer = recvdData_dyn(sock);
+
+    char firstThreeLetter[3];
+    for(int i = 0; i < 3; i++) {
+        firstThreeLetter[i] = tempBuffer[i];
+    }
+
+    if(strcmp(firstThreeLetter, "GET") == 0) {
+        readUrlFromGETReq(url, tempBuffer);
+        printf("readReq: GET: %s\n", url);
+    }
+    else if(strcmp(firstThreeLetter, "PUT") == 0) {
+        readUrlFromPUTReq(url, tempBuffer);
+        printf("readReq: PUT:\n");
+    }
+    else if(strcmp(firstThreeLetter, "POS") == 0) {
+        readUrlFromPOSTReq(url, tempBuffer);
+        printf("readReq: POST:\n");
+    }
+    free(tempBuffer);
+    return sock;
+}
+
 // assumes the HTTP method is GET
-// returns the socket id
-// sets the URL requested in form of an array of character
-int readUrlFromGETReq(char *url, uint16_t port_num) {
+// sets the URL requested in char *url
+// char *tempBuffer is the string of complete request
+void readUrlFromGETReq(char *url, char *tempBuffer) {
     // example request line
     // GET /index.html HTTP/1.1
 
-    int sock = estTcpConnection(port_num);
-    char *tempBuffer = recvdData_dyn(sock);
     int i = 4;
     while(tempBuffer[i] != '\0' && tempBuffer[i] != ' ') {
         url[i-4] = tempBuffer[i];
         i++;
     }
     url[i-4] = '\0';
-    free(tempBuffer);
-
-    return sock;
 }
 
 // assumes the HTTP method is PUT
-// returns the socket id
-// and sets the URL requested in form of an array of character
-int readUrlFromPUTReq(char *url, uint16_t port_num) {
+// sets the URL requested in char *url
+// char *tempBuffer is the string of complete request
+void readUrlFromPUTReq(char *url, char *tempBuffer) {
     // example request line
     // PUT /index.html HTTP/1.1
 
-    int sock = estTcpConnection(port_num);
-    char *tempBuffer = recvdData_dyn(sock);
     int i = 4;
     while(tempBuffer[i] != '\0' && tempBuffer[i] != ' ') {
         url[i-4] = tempBuffer[i];
@@ -82,19 +102,15 @@ int readUrlFromPUTReq(char *url, uint16_t port_num) {
     }
     url[i-4] = '\0';
     free(tempBuffer);
-
-    return sock;
 }
 
 // assumes the HTTP method is POST
-// returns the socket id
-// and sets URL requested in form of an array of character
-int readUrlFromPOSTReq(char *url, uint16_t port_num) {
+// sets the URL requested in char *url
+// char *tempBuffer is the string of complete request
+void readUrlFromPOSTReq(char *url, char *tempBuffer) {
     // example request line
     // POST /index.html HTTP/1.1
 
-    int sock = estTcpConnection(port_num);
-    char *tempBuffer = recvdData_dyn(sock);
     int i = 5;
     while(tempBuffer[i] != '\0' && tempBuffer[i] != ' ') {
         url[i-5] = tempBuffer[i];
@@ -102,22 +118,20 @@ int readUrlFromPOSTReq(char *url, uint16_t port_num) {
     }
     url[i-5] = '\0';
     free(tempBuffer);
-
-    return sock;
 }
 
 // 200 OK response depends on whether the type of request was GET, PUT, PUSH
 // constructs appropriate 200 OK response based on type of request and sends it
 void sendAppropriateResponse_200OK(int reqType, int port_num) {
     if(reqType == GET) {
-        char* urlSting[256]; // length = 256 for now, change later
-        int sock = readUrlFromGETReq(urlSting, port_num);
+        char urlSting[256]; // length = 256 for now, change later
+        int sock = readReq(urlSting, port_num);
 
         // sending resource
         char *filepathToRead = determineFilepath(urlSting);
         char *con = readFile_dyn(filepathToRead);
         printf("%s\n", con);
-        char *res = constructOKResponseToSend_dyn(HTML, con);
+        char *res = constructOKResponseToSend_GET_dyn(HTML, con);
         sendCompleteResponse(sock, res);
         free(con);
         free(res);
@@ -132,12 +146,15 @@ void sendAppropriateResponse_200OK(int reqType, int port_num) {
 }
 
 /***void sendAppropriateResponse_404(int reqType, int port_num) {
-    char* responseCode = "HTTP/1.1 404 Not Found\n";
+    if(reqType == GET) {
+        char* urlSting[256]; // length = 256 for now, change later
+        int sock = readUrlFromGETReq(urlSting, port_num);
 
-    char* urlString[256];
-    int sock = readUrlFromGETReq(urlString, port_num);
+    }
+    else {
 
-}****/
+    }
+}***/
 
 // this function creates a valid HTTP/1.1 200 OK response
 // free the memory from the caller side
@@ -178,3 +195,35 @@ char* constructOKResponseToSend_GET_dyn(int conType, char *content) {
 char* constructOKResponseToSend_PUT_dyn(int conType, char *content);
 // 200 OK response for PUSH request
 char* constructOKResponseToSend_PUSH_dyn(int conType, char *content);
+
+/***char* construct_404NotFound_ResponseToSend_GET_dyn(int conType, char *content) {
+    long int respLen = strlen(content);
+
+    char content_length[100] = "Content-Length: ";
+    printf("404 respLen : %ld\n", respLen); // for debugging
+    char *num_len = intToStr_dyn(respLen);
+    printf("404 num_len : %s\n", num_len); // for debugging
+    strcat(content_length, num_len);
+    strcat(content_length, "\n");
+
+    char *content_type;
+    switch (conType) {
+        case PLAIN:
+            content_type = "Content-Type:text/plain\n\n";
+            break;
+        case HTML:
+            content_type = "Content-Type:text/html\n\n";
+            break;
+    }
+    char *response_code = "HTTP/1.1 404 Not Found\n";
+    char *response = (char*) malloc(strlen(response_code) + strlen(content_length) +
+                                    strlen(content_type) + respLen + 1);
+
+    strcpy(response, response_code);
+    strcat(response, content_length);
+    strcat(response, content_type);
+    strcat(response, content);
+
+    free(num_len);
+    return response;
+}***/
