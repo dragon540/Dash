@@ -47,7 +47,8 @@ void sendCompleteResponse(int comm_sockfd, char *msg) {
 }
 
 // assumes the HTTP method is GET
-// returns the URL requested in form of an array of character
+// returns the socket id
+// sets the URL requested in form of an array of character
 int readUrlFromGETReq(char *url, uint16_t port_num) {
     // example request line
     // GET /index.html HTTP/1.1
@@ -63,16 +64,46 @@ int readUrlFromGETReq(char *url, uint16_t port_num) {
     free(tempBuffer);
 
     return sock;
-    /*** experimental call
-    char *filepathToRead = determineFilepath(url);
-    char *con = readFile_dyn(filepathToRead);
-    printf("%s\n", con);
-    char *res = constructOKResponseToSend_dyn(HTML, con);
-    sendCompleteResponse(sock, res);
-    free(con);
-    free(res);
-    close(sock);
-    end of experimemntal call ***/
+}
+
+// assumes the HTTP method is PUT
+// returns the socket id
+// and sets the URL requested in form of an array of character
+int readUrlFromPUTReq(char *url, uint16_t port_num) {
+    // example request line
+    // PUT /index.html HTTP/1.1
+
+    int sock = estTcpConnection(port_num);
+    char *tempBuffer = recvdData_dyn(sock);
+    int i = 4;
+    while(tempBuffer[i] != '\0' && tempBuffer[i] != ' ') {
+        url[i-4] = tempBuffer[i];
+        i++;
+    }
+    url[i-4] = '\0';
+    free(tempBuffer);
+
+    return sock;
+}
+
+// assumes the HTTP method is POST
+// returns the socket id
+// and sets URL requested in form of an array of character
+int readUrlFromPOSTReq(char *url, uint16_t port_num) {
+    // example request line
+    // POST /index.html HTTP/1.1
+
+    int sock = estTcpConnection(port_num);
+    char *tempBuffer = recvdData_dyn(sock);
+    int i = 5;
+    while(tempBuffer[i] != '\0' && tempBuffer[i] != ' ') {
+        url[i-5] = tempBuffer[i];
+        i++;
+    }
+    url[i-5] = '\0';
+    free(tempBuffer);
+
+    return sock;
 }
 
 // 200 OK response depends on whether the type of request was GET, PUT, PUSH
@@ -99,6 +130,14 @@ void sendAppropriateResponse_200OK(int reqType, int port_num) {
         reqType = POST;
     }
 }
+
+/***void sendAppropriateResponse_404(int reqType, int port_num) {
+    char* responseCode = "HTTP/1.1 404 Not Found\n";
+
+    char* urlString[256];
+    int sock = readUrlFromGETReq(urlString, port_num);
+
+}****/
 
 // this function creates a valid HTTP/1.1 200 OK response
 // free the memory from the caller side
