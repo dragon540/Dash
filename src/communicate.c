@@ -120,7 +120,7 @@ void readUrlFromPOSTReq(char *url, char *tempBuffer) {
     free(tempBuffer);
 }
 
-// 200 OK response depends on whether the type of request was GET, PUT, PUSH
+// 200 OK response depends on whether the type of request was GET, PUT, POST
 // constructs appropriate 200 OK response based on type of request and sends it
 void sendAppropriateResponse_200OK(int reqType, int port_num) {
     if(reqType == GET) {
@@ -193,8 +193,8 @@ char* constructOKResponseToSend_GET_dyn(int conType, char *content) {
 }
 // 200 OK response for PUT request
 char* constructOKResponseToSend_PUT_dyn(int conType, char *content);
-// 200 OK response for PUSH request
-char* constructOKResponseToSend_PUSH_dyn(int conType, char *content);
+// 200 OK response for POST request
+char* constructOKResponseToSend_POST_dyn(int conType, char *content);
 
 /***char* construct_404NotFound_ResponseToSend_GET_dyn(int conType, char *content) {
     long int respLen = strlen(content);

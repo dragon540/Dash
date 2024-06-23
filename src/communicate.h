@@ -43,7 +43,7 @@ void readUrlFromPUTReq(char *url, char *tempBuffer);
 // char *tempBuffer is the string of complete request
 void readUrlFromPOSTReq(char *url, char *tempBuffer);
 
-// 200 OK response depends on whether the type of request was GET, PUT, PUSH
+// 200 OK response depends on whether the type of request was GET, PUT, POST
 // constructs appropriate 200 OK response based on type of request and sends it
 void sendAppropriateResponse_200OK(int reqType, int port_num);
 
@@ -54,9 +54,9 @@ void sendAppropriateResponse_200OK(int reqType, int port_num);
 // ARGUMENTS - PLAIN or HTML, and a *content which points to the actual message to be sent
 // RETURN - pointer to a dynamically allocated string denoting a valid OK response
 // free the memory from the caller side
-// 200 OK response depends on whether the type of request was GET, PUT, PUSH
+// 200 OK response depends on whether the type of request was GET, PUT, POST
 char* constructOKResponseToSend_GET_dyn(int conType, char *content);
 char* constructOKResponseToSend_PUT_dyn(int conType, char *content);
-char* constructOKResponseToSend_PUSH_dyn(int conType, char *content);
+char* constructOKResponseToSend_POST_dyn(int conType, char *content);
 
 #endif //DASHSERVER_COMMUNICATE_H
