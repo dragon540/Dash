@@ -18,11 +18,10 @@ int main(int argc, char *argv[]) {
 
     URLMappingConfig();
 
-    //printBSTInorder(rootPtr);
+    //maprintBSTInorder(rootPtr);
     //printf("%s\n", determineFilepath("/"));
 
-    //sendAppropriateResponse_200OK(GET,80);
-    sendAppropriateResponse_404NotFound(GET,80);
+    sendResponse(80);
 
     return 0;
 }

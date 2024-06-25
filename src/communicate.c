@@ -48,7 +48,8 @@ void sendCompleteResponse(int comm_sockfd, char *msg) {
 
 // returns socket id of the connection and sets
 // char *url as url requested in the HTTP request
-int readReq(char *url, uint16_t port_num) {
+// sets reqType according to whether request tpe is GET, PUT, POST
+int readReq(char *url, int *reqType, uint16_t port_num) {
     int sock = estTcpConnection(port_num);
     char *tempBuffer = recvdData_dyn(sock);
 
@@ -60,14 +61,17 @@ int readReq(char *url, uint16_t port_num) {
     if(strcmp(firstThreeLetter, "GET") == 0) {
         readUrlFromGETReq(url, tempBuffer);
         printf("readReq: GET: %s\n", url);
+        *reqType = GET;
     }
     else if(strcmp(firstThreeLetter, "PUT") == 0) {
         readUrlFromPUTReq(url, tempBuffer);
         printf("readReq: PUT:\n");
+        *reqType = PUT;
     }
     else if(strcmp(firstThreeLetter, "POS") == 0) {
         readUrlFromPOSTReq(url, tempBuffer);
         printf("readReq: POST:\n");
+        *reqType = POST;
     }
     free(tempBuffer);
     return sock;
@@ -120,15 +124,35 @@ void readUrlFromPOSTReq(char *url, char *tempBuffer) {
     free(tempBuffer);
 }
 
+
+// reads the url requested and sends appropriate
+// response after checking internally
+void sendResponse(uint16_t port_num) {
+    char url[256];  // length = 256 for now, change later
+    int reqType;
+    int sock = readReq(url, &reqType, port_num);
+    if(determineFilepath(url) != NULL) {
+        if(reqType == GET) {
+            sendAppropriateResponse_200OK(GET, port_num, sock, url);
+        }
+        /***else if(reqType == PUT)
+            sendAppropriateResponse_200OK(PUT, port_num, sock, url);
+        else
+            sendAppropriateResponse_200OK(POST, port_num, sock, url);
+            ***/
+    }
+    else {
+        sendAppropriateResponse_404NotFound(GET, port_num, sock, url);
+    }
+}
+
 // 200 OK response depends on whether the type of request was GET, PUT, POST
 // constructs appropriate 200 OK response based on type of request and sends it
-void sendAppropriateResponse_200OK(int reqType, uint16_t port_num) {
+void sendAppropriateResponse_200OK(int reqType, uint16_t port_num, int sock, char urlString[]) {
     if(reqType == GET) {
-        char urlSting[256]; // length = 256 for now, change later
-        int sock = readReq(urlSting, port_num);
 
         // sending resource
-        char *filepathToRead = determineFilepath(urlSting);
+        char *filepathToRead = determineFilepath(urlString);
         char *con = readFile_dyn(filepathToRead);
         printf("%s\n", con);
         char *res = constructOKResponseToSend_GET_dyn(HTML, con);
@@ -145,14 +169,12 @@ void sendAppropriateResponse_200OK(int reqType, uint16_t port_num) {
     }
 }
 
-void sendAppropriateResponse_404NotFound(int reqType, uint16_t port_num) {
+void sendAppropriateResponse_404NotFound(int reqType, uint16_t port_num, int sock, char urlString[]) {
     if(reqType == GET) {
-        char urlSting[256]; // length = 256 for now, change later
-        int sock = readReq(urlSting, port_num);
 
         // sending resource
-        char *filepathToRead = determineFilepath(urlSting);
-        //char *con = readFile_dyn(filepathToRead);
+        char *filepathToRead = determineFilepath(urlString);
+        //char *con = readFile_dyn(filepathToRead); // de-comment later when 404 html file can be set by user
         char *con = readFile_dyn("../DashServer/resource/404NotFound.html"); // make it configurable later
         printf("%s\n", con);
         char *res = construct_404NotFound_ResponseToSend_GET_dyn(HTML, con);
