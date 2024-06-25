@@ -62,7 +62,7 @@ void mapNewURL(char *URL, char *filepath) {
 }
 
 // takes URL as parameter and returns the filepath mapped to that particular URL
-// NOTE: if no mapping is found then returns the filepath mapped to the rootPtr of the MapBST
+// NOTE: if no mapping is found then returns NULL pointer
 char* determineFilepath(char *URL) {
     MapBST *temp = rootPtr;
     while(temp != NULL) {
@@ -73,13 +73,15 @@ char* determineFilepath(char *URL) {
             if(temp->rightNode != NULL)
                 temp = temp->rightNode;
             else
-                return rootPtr->fileName;
+                //return rootPtr->fileName;
+                return NULL;
         }
         else if(strcmp(URL, temp->MappedURL) < 0) {
             if(temp->leftNode != NULL)
                 temp = temp->leftNode;
             else
-                return rootPtr->fileName;
+                //return rootPtr->fileName;
+                return NULL;
         }
     }
 }

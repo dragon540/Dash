@@ -28,7 +28,7 @@ void printBSTInorder(MapBST *node);
 void mapNewURL(char *URL, char *filepath);
 
 // takes URL as parameter and returns the filepath mapped to that particular URL
-// NOTE: if no mapping is found then returns the filepath mapped to the rootPtr of the MapBST
+// NOTE: if no mapping is found then returns NULL pointer
 char* determineFilepath(char *URL);
 
 #endif //DASHSERVER_PAGE_MAP_H
