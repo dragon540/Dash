@@ -50,7 +50,8 @@ void readUrlFromPOSTReq(char *url, char *tempBuffer);
 
 // reads the url requested and sends appropriate
 // response after checking internally
-void sendResponse(uint16_t port_num);
+//void sendResponse(uint16_t port_num);
+void* sendResponse();
 
 // 200 OK response depends on whether the type of request was GET, PUT, POST
 // constructs appropriate 200 OK response based on type of request and sends it

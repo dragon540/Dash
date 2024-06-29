@@ -127,10 +127,12 @@ void readUrlFromPOSTReq(char *url, char *tempBuffer) {
 
 // reads the url requested and sends appropriate
 // response after checking internally
-void sendResponse(uint16_t port_num) {
+void* sendResponse() {
+    uint16_t port_num = 80;
     char url[256];  // length = 256 for now, change later
     int reqType;
     int sock = readReq(url, &reqType, port_num);
+    printf("filepath: %s\n", determineFilepath(url));
     if(determineFilepath(url) != NULL) {
         if(reqType == GET) {
             sendAppropriateResponse_200OK(GET, port_num, sock, url);
