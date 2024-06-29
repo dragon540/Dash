@@ -73,15 +73,15 @@ char* determineFilepath(char *URL) {
             if(temp->rightNode != NULL)
                 temp = temp->rightNode;
             else
-                //return rootPtr->fileName;
-                return NULL;
+                return rootPtr->fileName;
+                //return NULL;
         }
         else if(strcmp(URL, temp->MappedURL) < 0) {
             if(temp->leftNode != NULL)
                 temp = temp->leftNode;
             else
-                //return rootPtr->fileName;
-                return NULL;
+                return rootPtr->fileName;
+                //return NULL;
         }
     }
 }
