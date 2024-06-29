@@ -23,10 +23,10 @@ helper.o: src/helper.c src/helper.h
 	$(CC) -c src/helper.c
 
 main.o: src/main.c src/communicate.h src/server_config.h
-	$(CC) -c src/main.c
+	$(CC) -c -pthread src/main.c
 
 $(PROGNAME): server_config.o page_map.o connect.o communicate.o read_resource.o helper.o main.o
-	$(CC) $(CFLAG1) server_config.o page_map.o connect.o communicate.o read_resource.o helper.o main.o -o $(PROGNAME)
+	$(CC) $(CFLAG1) -lpthread server_config.o page_map.o connect.o communicate.o read_resource.o helper.o main.o -o $(PROGNAME)
 
 clean:
 	rm *.o
