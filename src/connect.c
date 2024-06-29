@@ -23,7 +23,7 @@ int estTcpConnection(uint16_t port_num) {
     }
     // on successful connection_socket creation
     int opt = 1;
-    int sockopt = setsockopt(connectionSock_fd, SOL_SOCKET, SO_REUSEADDR,
+    int sockopt = setsockopt(connectionSock_fd, SOL_SOCKET, SO_REUSEPORT,
                              &opt, sizeof(opt));
     // check if socket options are set successfully
     // otherwise exit
